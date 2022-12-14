@@ -1,0 +1,24 @@
+---
+title: "Kristy Ma's Statistical Genetics Notes"
+description: |
+  Welcome to the website. This is a portfolio consists of notes in STAT494 (statistical genetics).
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating websites with Distill at:
+# https://rstudio.github.io/distill/website.html
+
+# Learn more about publishing to GitHub Pages at:
+# https://rstudio.github.io/distill/publish_website.html#github-pages
+
+```
+
+# Introduction to statistical genetics
+
+Statistical Genetics is a subject and field of study investigating how variation in genome associates people's research of interests by statistical methods. Through this tiny bookdown, we will explore a tiny subfield of statistical genetics:*Genome wide association studies (GWAS)*. It is one of the most popular statistical tools. The method investigates a type of genetic variants, called *SNP (single-nucleotide polymorphism)*, and its associations with the trait of interest. The trait can be either binary (for example, if a person is affected by a disease), or quantitative (for example, body weight/ height).
+
+In chapter 1, we will learn the context of Genome-wide association studies, and its basics.
+In chapter 2, we will explore the effect of population, ancestry and how that related to GWAS application and analysis.

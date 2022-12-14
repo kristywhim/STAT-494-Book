@@ -1,0 +1,14 @@
+name: "STAT-494-Book"
+title: "My Statistical Genetics Notes"
+description: |
+  My Statistical Genetics Notes
+output_dir: "docs"
+navbar:
+  right:
+    - text: "Welcome!"
+      href: index.html
+    - text: "Chapter1: GWAS"
+      href: gwas.html   
+    - text: "Chapter2: ancestry"
+      href: ancestry.html
+output: distill::distill_article
