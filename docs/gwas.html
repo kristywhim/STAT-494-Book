@@ -2310,18 +2310,15 @@ P(have T1E) = 1-P({no}T1E_{test1})P({no}T1E_{test2})...P({no}T1E_{testp})= 1- 0.
 <span><span class='co'># loop through each of the 83 SNPs</span></span>
 <span><span class='kw'>for</span><span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>83</span><span class='op'>)</span><span class='op'>{</span></span>
 <span>  <span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>snps</span><span class='op'>[</span>,<span class='va'>i</span><span class='op'>]</span><span class='op'>)</span> <span class='co'># fit model looking at SNP i</span></span>
-<span>  <span class='va'>pvals</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span><span class='op'>$</span><span class='va'>p.value</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span> <span class='co'># record p-value</span></span>
+<span>  <span class='va'>pvals</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'>tidy</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span><span class='op'>$</span><span class='va'>p.value</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span> <span class='co'># record p-value</span></span>
 <span><span class='op'>}</span></span>
 <span></span>
 <span><span class='co'># check how many p-values are below 0.05</span></span>
 <span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>pvals</span> <span class='op'>&lt;</span> <span class='fl'>0.05</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>[1] 3</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>pvals</span> <span class='op'>&lt;</span> <span class='fl'>0.05</span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code>[1] 0.03614458</code></pre>
-</div>
+<p>Note that since we simulate a fake, null trait, so we expect <code>sum(pvals &lt; 0.05)</code> to be 0. That is, there should be no SNP with a p-value smaller than our significant threshold because these SNPs are designed not causal. However, the code tells us there are 3 significant SNPs.</p>
 <p>How many wrongly discovery of finding a meaningful SNP did you see? What does the mean tell us?</p>
 <p><strong>Answer:</strong> Ideally, we would hope not to see any p-values below 0.05 since none of our 83 SNPs are truly associated with the trait. However, we ended up with 3 SNPs (out of 83) with a p-value smaller than 0.05. If we used a significance threshold of 0.05, this would mean that we incorrectly reject the null hypothesis for 3.61 percent of the SNPs.</p>
 <p>What happens when we repeat the process many times (i.e. carry out many hypothesis tests as in real GWAS studies)?</p>
@@ -2350,14 +2347,12 @@ P(have T1E) = 1-P({no}T1E_{test1})P({no}T1E_{test2})...P({no}T1E_{testp})= 1- 0.
 </div>
 <p>What number do you got from <code>sum(simres)</code>?</p>
 <p>This actually counts the number of simulation (out of 500) that occurs type I error. It should be 493/500 = 0.986. In other words, there is 98.6% chance that we have at least 1 type I error across 83 tests.</p>
-<h3 id="setting-the-correct-threshold">Setting the correct threshold</h3>
+<h2 id="setting-the-correct-threshold">Setting the correct threshold</h2>
 <p>In this section, we will introduce two methods to address the problem with multiple testing.</p>
 <h3 id="method-1-bonferroni-correction">Method 1: Bonferroni Correction</h3>
-<p>Bonferroni correction is very easy. Continued with the asssumption above (tests are independent), The new threshold would be:
-<span class="math display">\[
+<p>Bonferroni correction is very easy. Continued with the asssumption above (tests are independent), The new threshold would be: <span class="math display">\[
 \alpha_{new} = \frac{\alpha_{old}}{n}
-\]</span>
-where <span class="math inline">\(n\)</span> is the number of independent tests. While it is very easily calculated, its main con is that sometimes the new threshold can be too small, thus making our decision too conservative if tests are not independent. This means we are oppositely, being too strict on the threshold and may prone to filter out those SNPs with meaningful association (i.e. prone to type II error)! This is also concerning because in GWAS genetic studies, genes are highly correlated together. This nature limits the usefulness of Bonferroni in some strict studies. However, if the tests are not correlated, this is definitely preferred!</p>
+\]</span> where <span class="math inline">\(n\)</span> is the number of independent tests. While it is very easily calculated, its main con is that sometimes the new threshold can be too small, thus making our decision too conservative if tests are not independent. This means we are oppositely, being too strict on the threshold and may prone to filter out those SNPs with meaningful association (i.e. prone to type II error)! This is also concerning because in GWAS genetic studies, genes are highly correlated together. This nature limits the usefulness of Bonferroni in some strict studies. However, if the tests are not correlated, this is definitely preferred!</p>
 <p>For example: If referring to the lab above, then the Bonferroni corrected p-value threshold is</p>
 <p><span class="math display">\[
 \alpha =  \frac{0.05}{83}  = 6*10^{-4}
@@ -2457,7 +2452,7 @@ rs3131969         NA 0.007526042         NA 0.800991691 .          </code></pre>
 </ul>
 <h2 id="outro">Outro</h2>
 <p>Congratulations on finishing off the first main chapter in statistical genetics: GWAS. While we went through some important aspects and limits of GWAS, it is worth noting that GWAS still applies to other topics in biostatistics, for example, the search for gene-gene and gene-environment interactions.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
