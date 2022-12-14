@@ -207,7 +207,6 @@ for(i in 1:83){
 
 # check how many p-values are below 0.05
 sum(pvals < 0.05)
-mean(pvals < 0.05)
 ```
 
 How many wrongly discovery of finding a meaningful SNP did you see? What does the mean tell us?
@@ -243,7 +242,7 @@ What number do you got from `sum(simres)`?
 
 This actually counts the number of simulation (out of 500) that occurs type I error. It should be 493/500 = 0.986. In other words, there is 98.6% chance that we have at least 1 type I error across 83 tests.
 
-### Setting the correct threshold
+## Setting the correct threshold
 
 In this section, we will introduce two methods to address the problem with multiple testing.
 
